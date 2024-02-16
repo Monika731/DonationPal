@@ -1,0 +1,73 @@
+h1 {
+    text-align: start;
+    text-shadow: 1px 1px 1px #222;
+    font-family: 'Lora', serif;
+    padding: 10px;
+}
+
+.card {
+  margin-left: 25px;
+}
+
+.card-body {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    transition: box-shadow 0.3s;
+    background-color: rgb(196, 165, 149);
+  }
+  
+  .card:hover {
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
+    transform: scale(1.05);
+  }
+  
+  .card-title {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 1.25rem;
+    font-weight: bold;
+    text-align: left;
+  }
+  
+  .card-text {
+    font-family: 'Times New Roman', Times, serif;
+    color: #555;
+    text-align: start;
+  }
+  
+  .card-link {
+    text-decoration: none;
+    color: #1d5c23;
+  }
+  
+  .card-link:hover {
+    text-decoration: underline;
+  }
+  
+  .container {
+    max-width: 1200px;
+  }
+  
+  @media (max-width: 768px) {
+    .container {
+      padding-left: 15px;
+      padding-right: 15px;
+    }
+  }
+  
+  @media (min-width: 768px) {
+    .container {
+      width: 750px;
+    }
+  }
+  
+  @media (min-width: 992px) {
+    .container {
+      width: 970px;
+    }
+  }
+  
+  @media (min-width: 1200px) {
+    .container {
+      width: 1170px;
+    }
+  }

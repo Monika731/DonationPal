@@ -1,0 +1,42 @@
+.heading{
+    font-family: 'Lora', serif;
+    color: #557c3e;
+    font-size: 1.5em;
+    text-transform: uppercase;
+    font-weight: bold;
+    text-shadow: 1px 1px 1px #222;
+    margin-top: 0;
+    margin-bottom: 0;
+    line-height: .75;
+    text-align: start;
+    text-decoration: underline;
+}
+
+#header-nav {
+    background-color: bisque;
+    border-radius: 0;
+    border: 0;
+}
+
+img {
+    margin: 10px 15px 10px 0;
+}
+
+.navbar-brand {
+    padding: 15px;
+  }
+
+.navbar-header {
+    width: 100%;
+}
+
+.navlink {
+    font-family: 'Times New Roman', Times, serif;
+    text-align: right;
+    font-size: 20px;
+}
+
+.navlink :hover {
+    background-color: cadetblue;
+}
+
