@@ -7,12 +7,18 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const passport = require('passport');
 
 //Routers
 const apiRouter = require('./routes/api/v1');
+const usersRouter = require('./routes/api/v1/users');
 
 //App initialization
 const app = express();
+
+//Passport initialization
+//Makes passport available throughout the app
+require('config/passport');
 
 //Connect to Mongo via mongoose
 mongoose.connect(process.env.MONGO_CONNECTION_STRING, {
@@ -30,5 +36,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 
 app.use('/api/v1', apiRouter);
+app.use('/api/v1/users', usersRouter);
 
 module.exports = app;
