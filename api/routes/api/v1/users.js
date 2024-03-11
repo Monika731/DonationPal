@@ -3,6 +3,12 @@ const router = express.Router();
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 
+const mongoose = require('mongoose');
+require('models/User');
+require('models/Donation');
+const User = mongoose.model('user')
+const Donation = mongoose.model('donations');
+
 router.get('/', (req, res) => {
     res.send('Root API route for users');
 });
@@ -34,4 +40,32 @@ router.post('/login',
     }
 )
 
+router.get('/user', passport.authenticate('jwt', { session: false }), async (req, res) => {
+    try {
+        const userId = req.user.id;
+
+        const user = await User.findById(userId);
+        console.log(user);
+
+        res.json(user);
+    } catch (error) {
+        console.error('Error fetching user data:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+router.get('/donations', passport.authenticate('jwt', {session: false}), async (req, res) => {
+    try {
+        const userId = req.user.id;
+
+        const donations = await Donation.find({ user_id: userId })
+            .populate('campaign_id', 'name')
+            .exec();
+
+        res.json(donations);
+    } catch (error) {
+        console.error('Error fetching user donations:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
 module.exports = router;

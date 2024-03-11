@@ -16,8 +16,11 @@ function Header() {
                                 <span> DonationPal</span>
                             </div>
                             <nav className='navlink'>
-                                <RouterLink to='/'>
+                                <RouterLink to='/' className='Header-Link'>
                                     Home
+                                </RouterLink>
+                                <RouterLink to='/Login' className='Header-Link'>
+                                    Login
                                 </RouterLink>
                             </nav>
                         </div>

@@ -12,6 +12,10 @@ const UserSchema = new Schema({
     password: {
         type: String,
         required: true
+    },
+    name: {
+        type: String,
+        required: true
     }
 });
 UserSchema.methods.isValidPassword = async function(encryptedPassword) {

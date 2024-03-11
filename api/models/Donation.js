@@ -8,6 +8,11 @@ const DonationSchema = new Schema({
         ref: 'campaigns',
         required: true
     },
+    user_id: {
+        type: Schema.Types.ObjectId,
+        ref: 'users',
+        required: true
+    },
     message: {
         type: String,
         required: true,
