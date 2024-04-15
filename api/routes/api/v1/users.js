@@ -45,7 +45,7 @@ router.get('/user', passport.authenticate('jwt', { session: false }), async (req
         const userId = req.user.id;
 
         const user = await User.findById(userId);
-        console.log(user);
+        //console.log(user);
 
         res.json(user);
     } catch (error) {

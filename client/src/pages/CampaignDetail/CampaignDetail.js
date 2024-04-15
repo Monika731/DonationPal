@@ -1,15 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import { APIURLContext } from 'src/contexts/APIURLContext';
+
 
 function CampaignDetail() {
   const { id } = useParams();
   const [campaign, setCampaign] = useState({ campaign: {}, donations: [] });
+  const apiURL = useContext(APIURLContext);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const campaignResponse = await axios.get(`http://localhost:8080/api/v1/campaigns/${id}`);
+        const campaignResponse = await axios.get(`${apiURL}/campaigns/${id}`);
         setCampaign(campaignResponse.data);
       } catch (error) {
         console.error(error);
@@ -17,7 +20,7 @@ function CampaignDetail() {
     };
 
     fetchData();
-  }, [id]);
+  }, [id, apiURL]);
 
   const totalDonations = campaign.donations.reduce((total, donation) => total + donation.amount, 0);
 
@@ -35,7 +38,12 @@ function CampaignDetail() {
             <div className="progress-bar" role="progressbar" style={{ width: `${(totalDonations / campaign.campaign.goal) * 100}%` }} aria-valuenow={(totalDonations / campaign.campaign.goal) * 100} aria-valuemin="0" aria-valuemax="100"></div>
           </div>
           <div className="mt-3">
-            <button className="btn btn-primary m-2">Donate Now</button> 
+            <form action={apiURL + '/donations/create_checkout'} method='POST'>
+              <input type='hidden' name='campaign_id' value={campaign.campaign._id} />
+              <input type='hidden' name='campaign_name' value={campaign.campaign.name} />
+              <input type='hidden' name='donation_amount' value='3000' />
+              <button type='submit' className="btn btn-primary m-2">Donate $30 today</button>
+            </form> 
             <button className="btn btn-info">Share</button>
           </div>
         </div>
@@ -53,7 +61,9 @@ function CampaignDetail() {
             <tbody>
               {campaign.donations.map((donation, index) => (
                 <tr key={index}>
-                  <td>${donation.amount}</td>
+                  <td>${donation.amount}{donation.payment_id && (
+                    <span> with {donation.payment_id}</span>
+                  )}</td>
                   <td>{donation.message}</td>
                 </tr>
               ))}

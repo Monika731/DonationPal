@@ -6,6 +6,7 @@ import CampaignDetail from './pages/CampaignDetail/CampaignDetail';
 import LoginPage from './pages/LoginPage/LoginPage';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import PageLayout from './pages/Pagelayout/PageLayout';
+import DonationSuccess from './pages/DonationSuccess/DonationSuccess';
 
 function App() {
   return (
@@ -14,7 +15,8 @@ function App() {
       <Header />
       <Routes>
         <Route path='/' element={<Home />} />
-        <Route path="/campaigns/:id" element={<CampaignDetail />} />
+        <Route path='/campaigns/:id' element={<CampaignDetail />} />
+        <Route path='/donation_success' element={<DonationSuccess />}/>
         <Route path='/login' element={ <PageLayout /> }>
           <Route index element={ <LoginPage /> } />
           <Route path='/login/profile' element={ <ProfilePage /> } />

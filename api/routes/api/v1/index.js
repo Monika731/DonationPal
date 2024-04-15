@@ -17,7 +17,7 @@ router.get('/campaigns', async (req, res) => {
     //Using mongoose
     const filter = {};
     const campaigns = await Campaign.find(filter);
-    console.log(campaigns);
+    //console.log(campaigns);
     res.json(campaigns);
 }); 
 
@@ -34,7 +34,7 @@ router.get('/campaigns/:id', async (req, res) => {
         campaign: campaign,
         donations: donations
     };
-    console.log(result);
+    //console.log(result);
     res.json(result);
 });
 

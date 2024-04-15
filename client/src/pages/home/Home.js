@@ -1,6 +1,7 @@
 import 'src/pages/home/Home.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom'; 
+import { APIURLContext } from 'src/contexts/APIURLContext';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import logo from 'src/campaign.jpeg';
@@ -10,12 +11,13 @@ function Home() {
         const [campaigns, setCampaigns] = useState([]);
         const [loading, setLoading] = useState(false);
         const [error, setError] = useState('');
+        const apiURL = useContext(APIURLContext);
     
         useEffect(() => {
             // Define a function that loads tasks from the API
             const loadTasks = async () => {
                 try {
-                    const response = await axios.get(`http://localhost:8080/api/v1/campaigns`);
+                    const response = await axios.get(apiURL + '/campaigns');
                     console.log(response.data);
                     setCampaigns( (campaigns) => [...response.data]);
                     setLoading(false);
@@ -29,7 +31,7 @@ function Home() {
             // Call the function we defined
             setLoading(true);
             loadTasks();
-        }, []);
+        }, [apiURL]);
     return(
         <div className='container-fluid bg-secondary'>
             <h1>List of Campaigns</h1>

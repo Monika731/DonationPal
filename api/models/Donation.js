@@ -10,12 +10,10 @@ const DonationSchema = new Schema({
     },
     user_id: {
         type: Schema.Types.ObjectId,
-        ref: 'users',
-        required: true
+        ref: 'users'
     },
     message: {
         type: String,
-        required: true,
         trim: true
     },
     amount: {
@@ -23,8 +21,10 @@ const DonationSchema = new Schema({
         required: true
     },
     date: {
-        type: Date,
-        required: true
+        type: Date
+    },
+    payment_id: {
+        type: String
     }
 });
 
