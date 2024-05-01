@@ -6,6 +6,7 @@ require('models/Donation');
 const Campaign = mongoose.model('campaigns');
 const Donation = mongoose.model('donations');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const jwt = require('jsonwebtoken');
 
 //Helper function to get Prod/Dev Client/API URL
 const getURL = (app) => {
@@ -28,9 +29,10 @@ const getURL = (app) => {
 router.get('/', (req, res) => {
     res.send('Root API route for donations');
 });
-
 router.post('/create_checkout', async (req, res) => {
     console.log(req.body);
+    const decodedToken = jwt.verify(req.body.token, process.env.TOP_SECRET_KEY);
+    const user_id = decodedToken.payload.id;
     const session = await stripe.checkout.sessions.create({
         line_items: [
             {
@@ -48,7 +50,8 @@ router.post('/create_checkout', async (req, res) => {
         success_url: `${getURL('api')}/donations/donation_success?success=true&session_id={CHECKOUT_SESSION_ID}&campaign_id=${req.body.campaign_id}`,
         cancel_url: `${getURL('client')}`,
         metadata: {
-            camapaign_id: req.body.campaign_id
+            campaign_id: req.body.campaign_id,
+            user_id: user_id
         }
     });
 
@@ -57,24 +60,18 @@ router.post('/create_checkout', async (req, res) => {
 });
 
 router.get('/donation_success', async (req, res) => {
-    //view the entire querystring
-    console.log(req.query);
-    //Retrieve the checkout session from the stripe API
     const session = await stripe.checkout.sessions.retrieve(req.query.session_id);
-    //view the entire session object returned by stripe
-    console.log(session);
-    //Retrieve the campaign_id (metadata or querystring)
-    console.log(session.metadata.campaign_id);
-    console.log(req.query.campaign_id);
-    //add a donation record to the database
     const donation_amount = session.amount_total/100;
     const campaign_id = req.query.campaign_id;
-    console.log(campaign_id);
+    const user_id = session.metadata.user_id;
+    const donation_date = new Date();
     const newDonation = new Donation({
         campaign_id: campaign_id,
+        user_id: user_id,
         amount: donation_amount,
         message: "Payment through stripe",
-        payment_id: session.payment_intent
+        payment_id: session.payment_intent,
+        date: donation_date
     });
     await newDonation.save();
     //construct a URL to the frontend to deliver the user

@@ -1,12 +1,15 @@
 import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import useToken from 'src/hooks/useToken';
 import { APIURLContext } from 'src/contexts/APIURLContext';
 
 
 function CampaignDetail() {
   const { id } = useParams();
   const [campaign, setCampaign] = useState({ campaign: {}, donations: [] });
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { token } = useToken();
   const apiURL = useContext(APIURLContext);
 
   useEffect(() => {
@@ -22,7 +25,12 @@ function CampaignDetail() {
     fetchData();
   }, [id, apiURL]);
 
+  useEffect(() => {
+    setIsLoggedIn(!!token);
+  }, [token]);
+
   const totalDonations = campaign.donations.reduce((total, donation) => total + donation.amount, 0);
+  const progress = (totalDonations / campaign.campaign.goal) * 100;
 
   return (
     <div className="container-fluid bg-secondary">
@@ -32,18 +40,24 @@ function CampaignDetail() {
           <p>{campaign.campaign.description}</p>
           <p><span role="img" aria-label="raised">💰</span><span style={{ fontWeight: 'bold', fontSize: '1.2em' }}>${totalDonations} </span>raised of ${campaign.campaign.goal}</p>
           <p><span role="img" aria-label="donations">🎁</span>{campaign.donations.length} donations</p>
+          <p style={{ fontSize: '1.2em', fontWeight: 'bold', color: progress >= 100 ? 'green' : 'black' }}>
+            {`This campaign is ${progress.toFixed(2)}% funded!`}
+          </p>
         </div>
         <div className="col-md-6 d-flex flex-column align-items-center justify-content-center">
           <div className="progress mt-3 w-75">
             <div className="progress-bar" role="progressbar" style={{ width: `${(totalDonations / campaign.campaign.goal) * 100}%` }} aria-valuenow={(totalDonations / campaign.campaign.goal) * 100} aria-valuemin="0" aria-valuemax="100"></div>
           </div>
           <div className="mt-3">
+          {isLoggedIn && (
             <form action={apiURL + '/donations/create_checkout'} method='POST'>
               <input type='hidden' name='campaign_id' value={campaign.campaign._id} />
               <input type='hidden' name='campaign_name' value={campaign.campaign.name} />
               <input type='hidden' name='donation_amount' value='3000' />
+              {token && <input type='hidden' name='token' value={token} />}
               <button type='submit' className="btn btn-primary m-2">Donate $30 today</button>
             </form> 
+          )}
             <button className="btn btn-info">Share</button>
           </div>
         </div>

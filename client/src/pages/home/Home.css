@@ -46,6 +46,19 @@ h1 {
   .container {
     max-width: 1200px;
   }
+  .progress-container {
+    display: flex;
+    align-items: center;
+}
+
+.home-progress {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+.percentage {
+    font-weight: bold;
+}
   
   @media (max-width: 768px) {
     .container {
